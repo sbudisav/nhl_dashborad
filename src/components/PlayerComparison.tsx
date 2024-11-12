@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import SearchBar from "./SearchBar";
+import React, { useState } from "react";
+import PlayerSearch from "./PlayerSearch";
 import ScatterPlot from "./ScatterPlot";
 import { Player, fakePlayers } from "./types";
 
@@ -8,10 +8,7 @@ function PlayerComparison() {
   const [xAxis, setXAxis] = useState("points");
   const [yAxis, setYAxis] = useState("assists");
 
-  const handleSearch = (playerName: string) => {
-    const player = fakePlayers.find((p) =>
-      p.name.toLowerCase().includes(playerName.toLowerCase())
-    );
+  const handlePlayerSelected = (player: Player) => {
     if (
       player &&
       selectedPlayers.length < 5 &&
@@ -28,16 +25,24 @@ function PlayerComparison() {
   return (
     <div>
       <h2>Player Comparison</h2>
-      <SearchBar onSearch={handleSearch} />
+      <PlayerSearch
+        onSelect={handlePlayerSelected}
+        selectedPlayers={selectedPlayers}
+      />
       <div>
         <h3>Selected Players:</h3>
-        <ul>
+        <ul className="selected-player-list">
           {selectedPlayers.map((player) => (
-            <li key={player.id}>
-              {player.name}{" "}
-              <button onClick={() => handleRemovePlayer(player.id)}>
-                Remove
-              </button>
+            <li key={player.id} className="selected-player">
+              <div className="selected-player-text">
+                <span>{player.name}</span>
+                <button
+                  onClick={() => handleRemovePlayer(player.id)}
+                  className="selected-player-remove-button"
+                >
+                  x
+                </button>
+              </div>
             </li>
           ))}
         </ul>

@@ -14,7 +14,12 @@ function ScatterPlot({ players, xAxis, yAxis }: ScatterPlotProps) {
         Scatter Plot (X: {xAxis}, Y: {yAxis})
       </h3>
       <div
-        style={{ border: "1px solid black", width: "400px", height: "400px" }}
+        style={{
+          border: "1px solid black",
+          width: "400px",
+          height: "400px",
+          marginTop: "55px",
+        }}
       >
         {players.map((player: Player) => (
           <div key={player.id}>{player.name}</div>

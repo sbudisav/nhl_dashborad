@@ -20,16 +20,19 @@ html {
 button {
   padding: 10px 20px;
   cursor: pointer;
-  background-color: #4caf50;
-  color: white;
   border: none;
   border-radius: 5px;
   font-size: 16px;
   transition: background-color 0.3s ease;
 }
 
+ul {
+  list-style-type: none;
+}
+
 button:hover {
-  background-color: #45a049;
+  background-color: rgb(100, 100, 100);
+  color: white;
 }
 
 .container {
@@ -46,20 +49,6 @@ input[type="text"] {
   border: 1px solid #ccc;
 }
 
-button.search {
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #4caf50;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button.search:hover {
-  background-color: #45a049;
-}
-
 label {
   margin: 0 10px;
 }
@@ -70,28 +59,53 @@ select {
   border: 1px solid #ccc;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-ul li {
+.selected-player-list {
   display: flex;
-  justify-content: space-between;
-  margin: 5px 0;
 }
 
-ul li button {
-  padding: 5px 10px;
-  background-color: red;
-  color: white;
+.selected-player {
+  border-style: solid;
+  border-color: rgb(125, 125, 125);
+  border-radius: 20px;
+  height: 2rem;
+  transition: background-color 0.2s ease;
+  margin-right: 1rem;
+}
+
+.selected-player:hover {
+  background-color: #f0f0f0;
+}
+
+.selected-player-text {
+  font-size: 0.9rem;
+  margin-left: 1rem;
+  margin-right: 0.9rem;
+}
+
+.selected-player-remove-button {
+  display: inline;
+  background: none;
   border: none;
-  border-radius: 5px;
+  color: black;
+  font-size: 1rem;
   cursor: pointer;
+  padding: 5px;
 }
 
-ul li button:hover {
-  background-color: darkred;
+.player-suggestion-list {
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 80%;
+  text-align: left;
+  margin-left: 50px;
+}
+
+.player-suggestion-item {
+  padding: 8px;
+}
+
+.player-suggestion-item:hover {
+  background-color: #eaeaea;
 }
 
 h2 {
@@ -102,7 +116,7 @@ h2 {
   border: 1px solid black;
   width: 400px;
   height: 400px;
-  margin: 20px auto;
+  margin: 50px auto;
   display: flex;
   justify-content: center;
   align-items: center;

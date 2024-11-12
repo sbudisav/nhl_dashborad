@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SearchBar from "./SearchBar";
+import SearchBar from "./PlayerSearch";
 import { Player, fakePlayers } from "./types";
 
 function PlayerDetail() {
@@ -15,7 +15,7 @@ function PlayerDetail() {
   return (
     <div>
       <h2>Player Detail</h2>
-      <SearchBar onSearch={handleSearch} />
+      {/* <SearchBar onSearch={handleSearch} /> */}
       {player && (
         <div>
           <h3>{player.name}</h3>
