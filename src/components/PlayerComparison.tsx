@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PlayerSearch from "./PlayerSearch";
 import ScatterPlot from "./ScatterPlot";
-import { Player, fakePlayers } from "./types";
+import { Player } from "./types";
 
 function PlayerComparison() {
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
@@ -22,12 +22,17 @@ function PlayerComparison() {
     setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
   };
 
+  const handleClearPlayers = () => {
+    setSelectedPlayers([]);
+  };
+
   return (
     <div>
       <h2>Player Comparison</h2>
       <PlayerSearch
         onSelect={handlePlayerSelected}
         selectedPlayers={selectedPlayers}
+        clearPlayers={handleClearPlayers}
       />
       <div>
         <h3>Selected Players:</h3>

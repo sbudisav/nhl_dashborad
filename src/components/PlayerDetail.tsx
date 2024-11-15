@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import SearchBar from "./PlayerSearch";
-import { Player, fakePlayers } from "./types";
+import { Player } from "./types";
 
 function PlayerDetail() {
   const [player, setPlayer] = useState<Player>();
 
   const handleSearch = (playerName: string) => {
-    const foundPlayer = fakePlayers.find((p) =>
-      p.name.toLowerCase().includes(playerName.toLowerCase())
-    );
+    // const foundPlayer = fakePlayers.find((p) =>
+    //   p.name.toLowerCase().includes(playerName.toLowerCase())
+    // );
+    const foundPlayer = {
+      id: 123,
+      name: "Steve",
+      points: 12,
+      goals: 12,
+      assists: 24,
+      timeOnIce: 123,
+      fights: 0,
+    };
     setPlayer(foundPlayer);
   };
 
