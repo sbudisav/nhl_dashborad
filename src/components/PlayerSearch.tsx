@@ -41,18 +41,19 @@ function PlayerSearch({
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search for a player"
-        value={searchTerm}
-        onChange={handleSearch}
-      />
-      {selectedPlayers.length > 0 && (
-        <div>
-          {selectedPlayers.length === 5 && <div>Max 5 players </div>}
-          <button onClick={clearPlayers}>Clear Players</button>
-        </div>
-      )}
+      <div className="search-wrapper">
+        <input
+          type="text"
+          placeholder="Search for a player"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+        {selectedPlayers.length > 0 && (
+          <div>
+            <button onClick={clearPlayers}>Clear Players</button>
+          </div>
+        )}
+      </div>
       {searchSuggestion.length > 0 && selectedPlayers.length !== 5 && (
         <div>
           <ul className="player-suggestion-list">

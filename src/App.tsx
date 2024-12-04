@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
+import Navbar from "./components/Navbar";
 import PlayerComparison from "./components/PlayerComparison";
 import PlayerDetail from "./components/PlayerDetail";
 
@@ -8,15 +9,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <button onClick={() => setActiveTab("playerComparison")}>
-          Player Comparison
-        </button>
-        <button onClick={() => setActiveTab("playerDetail")}>
-          Player Detail
-        </button>
-      </header>
-
+      <Navbar setActiveTab={setActiveTab} />
       <div className="container">
         {activeTab === "playerComparison" && <PlayerComparison />}
         {activeTab === "playerDetail" && <PlayerDetail />}

@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import PlayerSearch from "./PlayerSearch";
-import ScatterPlot from "./ScatterPlot";
+import ScatterPlot from "./graphs/ScatterPlot";
 import { Player } from "./types";
+
+const axisValues = [
+  { type: "points", display: "Points" },
+  { type: "goals", display: "Goals" },
+  { type: "assists", display: "Assists" },
+  { type: "timeOnIce", display: "Time on Ice" },
+  { type: "fights", display: "Fights" },
+];
 
 function PlayerComparison() {
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
@@ -35,6 +43,9 @@ function PlayerComparison() {
         clearPlayers={handleClearPlayers}
       />
       <div>
+        {selectedPlayers.length === 5 && (
+          <div className="max-player-error">Max 5 players </div>
+        )}
         <h3>Selected Players:</h3>
         <ul className="selected-player-list">
           {selectedPlayers.map((player) => (
@@ -56,25 +67,21 @@ function PlayerComparison() {
         <label>
           X Axis:
           <select value={xAxis} onChange={(e) => setXAxis(e.target.value)}>
-            <option value="points">Points</option>
-            <option value="assists">Assists</option>
-            <option value="timeOnIce">Time on Ice</option>
-            <option value="fights">Fights</option>
+            {axisValues.map((value) => (
+              <option value={value.type}>{value.display}</option>
+            ))}
           </select>
         </label>
         <label>
           Y Axis:
           <select value={yAxis} onChange={(e) => setYAxis(e.target.value)}>
-            <option value="points">Points</option>
-            <option value="assists">Assists</option>
-            <option value="timeOnIce">Time on Ice</option>
-            <option value="fights">Fights</option>
+            {axisValues.map((value) => (
+              <option value={value.type}>{value.display}</option>
+            ))}
           </select>
         </label>
       </div>
-      <div className="scatterplot-container">
-        <ScatterPlot players={selectedPlayers} xAxis={xAxis} yAxis={yAxis} />
-      </div>
+      <ScatterPlot players={selectedPlayers} xAxis={xAxis} yAxis={yAxis} />
     </div>
   );
 }

@@ -24,6 +24,7 @@ export const fetchPlayerData = () => {
       fights: 0,
     };
   });
+  console.log(mappedData);
   return mappedData;
 };
 

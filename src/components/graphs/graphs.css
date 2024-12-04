@@ -1,0 +1,16 @@
+.scatter-plot-point {
+  opacity: 1;
+  fill-opacity: 0.8;
+  stroke-width: 1;
+}
+
+.scatter-plot-axis-line {
+  stroke: #929793;
+  stroke-width: 0.5;
+}
+
+.scatter-plot-axis-text {
+  font-size: 12px;
+  text-anchor: middle;
+  fill: #727673;
+}
