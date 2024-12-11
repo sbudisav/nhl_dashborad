@@ -14,3 +14,16 @@
   text-anchor: middle;
   fill: #727673;
 }
+
+.scatter-plot-xlabel {
+  position: relative;
+  margin: 0px;
+  top: -20px;
+}
+
+.scatter-plot-ylabel {
+  position: relative;
+  bottom: 300px;
+  right: 260px;
+  transform: rotate(270deg);
+}

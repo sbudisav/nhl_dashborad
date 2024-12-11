@@ -5,17 +5,11 @@ type AxisLeftProps = {
   yScale: ScaleLinear<number, number>;
   pixelsPerTick: number;
   width: number;
-  label: string;
 };
 
 const TICK_LENGTH = 10;
 
-export const AxisLeft = ({
-  yScale,
-  pixelsPerTick,
-  width,
-  label,
-}: AxisLeftProps) => {
+export const AxisLeft = ({ yScale, pixelsPerTick, width }: AxisLeftProps) => {
   const range = yScale.range();
 
   const ticks = useMemo(() => {

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Player } from "./types";
 import { fetchPlayerData } from "../services/playerApi";
+import useClickOutside from "../hooks/useClickOutside";
 
 type PlayerSearchProps = {
   onSelect: (player: Player) => void;
@@ -17,6 +18,7 @@ function PlayerSearch({
 }: PlayerSearchProps) {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchSuggestion, setSearchSuggestion] = useState<Player[]>([]);
+  const searchTextRef = useRef<HTMLInputElement>(null);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length < 1) setSearchSuggestion([]);
@@ -33,14 +35,19 @@ function PlayerSearch({
     onSelect(player);
     setSearchSuggestion(searchSuggestion.filter((p) => p.id !== player.id));
     if (selectedPlayers.length === 4) {
-      console.log("cleargin");
-      setSearchSuggestion([]);
-      setSearchTerm("");
+      clearSearch();
     }
   };
 
+  const clearSearch = () => {
+    setSearchSuggestion([]);
+    setSearchTerm("");
+  };
+
+  useClickOutside(searchTextRef, clearSearch);
+
   return (
-    <div>
+    <div ref={searchTextRef}>
       <div className="search-wrapper">
         <input
           type="text"
@@ -48,7 +55,7 @@ function PlayerSearch({
           value={searchTerm}
           onChange={handleSearch}
         />
-        {selectedPlayers.length > 0 && (
+        {selectedPlayers.length > 4 && (
           <div>
             <button onClick={clearPlayers}>Clear Players</button>
           </div>

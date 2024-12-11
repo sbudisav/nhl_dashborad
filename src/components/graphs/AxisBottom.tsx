@@ -5,7 +5,6 @@ type AxisBottomProps = {
   xScale: ScaleLinear<number, number>;
   pixelsPerTick: number;
   height: number;
-  label: string;
 };
 
 // tick length
@@ -15,7 +14,6 @@ export const AxisBottom = ({
   xScale,
   pixelsPerTick,
   height,
-  label,
 }: AxisBottomProps) => {
   const range = xScale.range();
 

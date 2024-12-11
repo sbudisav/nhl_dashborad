@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Player } from "../types";
+import { Player, scatterAxisValues } from "../types";
 import * as d3 from "d3";
 import { AxisLeft } from "./AxisLeft";
 import { AxisBottom } from "./AxisBottom";
@@ -7,8 +7,8 @@ import "./graphs.css";
 
 interface ScatterPlotProps {
   players: Player[];
-  xAxis: string;
-  yAxis: string;
+  xAxis: any;
+  yAxis: any;
 }
 
 const MARGIN = { top: 60, right: 60, bottom: 60, left: 60 };
@@ -54,12 +54,7 @@ function ScatterPlot({ players, xAxis, yAxis }: ScatterPlotProps) {
           transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
         >
           {/* Y axis */}
-          <AxisLeft
-            yScale={yScale}
-            pixelsPerTick={40}
-            width={boundsWidth}
-            label={yAxis}
-          />
+          <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
 
           {/* X axis, use an additional translation to appear at the bottom */}
           <g transform={`translate(0, ${boundsHeight})`}>
@@ -67,12 +62,13 @@ function ScatterPlot({ players, xAxis, yAxis }: ScatterPlotProps) {
               xScale={xScale}
               pixelsPerTick={40}
               height={boundsHeight}
-              label={xAxis}
             />
           </g>
           {dataPoints}
         </g>
       </svg>
+      <h3 className="scatter-plot-xlabel">{xAxis}</h3>
+      <h3 className="scatter-plot-ylabel">{yAxis}</h3>
     </div>
   );
 }

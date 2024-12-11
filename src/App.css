@@ -121,10 +121,10 @@ select {
   position: absolute;
   z-index: 1;
   background-color: white;
-  top: 10rem;
+  top: 200px;
   padding: 10px;
   border: 1px solid #ccc;
-  width: 58%;
+  width: 35%;
   text-align: left;
   margin-left: 50px;
 }

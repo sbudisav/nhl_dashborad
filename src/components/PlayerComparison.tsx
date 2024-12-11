@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import PlayerSearch from "./PlayerSearch";
 import ScatterPlot from "./graphs/ScatterPlot";
-import { Player } from "./types";
-
-const axisValues = [
-  { type: "points", display: "Points" },
-  { type: "goals", display: "Goals" },
-  { type: "assists", display: "Assists" },
-  { type: "timeOnIce", display: "Time on Ice" },
-  { type: "fights", display: "Fights" },
-];
+import { Player, scatterAxisValues } from "./types";
 
 function PlayerComparison() {
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
-  const [xAxis, setXAxis] = useState("points");
-  const [yAxis, setYAxis] = useState("assists");
+  const [xAxis, setXAxis] = useState(scatterAxisValues.points);
+  const [yAxis, setYAxis] = useState(scatterAxisValues.assists);
 
   const handlePlayerSelected = (player: Player) => {
     if (
@@ -66,17 +58,27 @@ function PlayerComparison() {
       <div>
         <label>
           X Axis:
-          <select value={xAxis} onChange={(e) => setXAxis(e.target.value)}>
-            {axisValues.map((value) => (
-              <option value={value.type}>{value.display}</option>
+          <select
+            value={xAxis}
+            onChange={(e) => {
+              console.log("What is this", e.target);
+              setXAxis(e.target.value);
+            }}
+          >
+            {Object.keys(scatterAxisValues).map((key) => (
+              <option key={key} value={key}>
+                {scatterAxisValues[key]}
+              </option>
             ))}
           </select>
         </label>
         <label>
           Y Axis:
           <select value={yAxis} onChange={(e) => setYAxis(e.target.value)}>
-            {axisValues.map((value) => (
-              <option value={value.type}>{value.display}</option>
+            {Object.keys(scatterAxisValues).map((key) => (
+              <option key={key} value={key}>
+                {scatterAxisValues[key]}
+              </option>
             ))}
           </select>
         </label>
