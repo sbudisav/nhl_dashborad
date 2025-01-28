@@ -1,46 +1,59 @@
 import React, { useState } from "react";
-import { Player } from "./types";
+import { Player, PlayerPlot } from "./types";
 import { fetchMockPlayer } from "../services/playerApi";
 import PlayerSearch from "./PlayerSearch";
+import PlayerList from "./PlayerList";
+import LineGraph from "./graphs/LineGraph";
+
+const playerDetailLimit = 5;
 
 function PlayerDetail() {
-  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
-
   const playerOverTime = fetchMockPlayer();
+  const gamesPlayed = playerOverTime.games;
+
+  const [selectedPlayers, setSelectedPlayers] = useState<PlayerPlot[]>([]);
 
   const handlePlayerSelected = (playerToAdd: Player) => {
-    // const foundPlayer = fakePlayers.find((p) =>
-    //   p.name.toLowerCase().includes(playerName.toLowerCase())
-    // );
-    setSelectedPlayers([playerOverTime]);
+    if (
+      playerToAdd &&
+      selectedPlayers.length < playerDetailLimit &&
+      !selectedPlayers.some((player) => player.id === playerToAdd.id)
+    ) {
+      const playerPlot: PlayerPlot = {
+        ...playerToAdd,
+        colorFill: `hsl(${42 * selectedPlayers.length}, 75%, 60%)`,
+        colorStroke: `hsl(${42 * selectedPlayers.length}, 75%, 47%)`,
+        //  In the future this will probably have to be a second API call
+        games: gamesPlayed || [],
+      };
+      setSelectedPlayers([...selectedPlayers, playerPlot]);
+    }
   };
 
-  const player = selectedPlayers[0];
-
-  const handleClearPlayers = () => {
-    return;
+  const handleRemovePlayer = (playerId: number) => {
+    setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
   };
+
+  // const handleClearPlayers = () => {
+  //   setSelectedPlayers([]);
+  // };
 
   return (
     <div>
       <h2>Player Detail</h2>
-      {selectedPlayers.length > 1 && (
-        <div>
-          <button onClick={handleClearPlayers}>Clear Players</button>
-        </div>
-      )}
       <PlayerSearch
         onSelect={handlePlayerSelected}
         selectedPlayers={selectedPlayers}
-        limit={1}
+        limit={playerDetailLimit}
       />
-      {player && (
+      <PlayerList
+        limit={playerDetailLimit}
+        selectedPlayers={selectedPlayers}
+        handleRemove={(playerId) => handleRemovePlayer(playerId)}
+      />
+      {selectedPlayers && (
         <div>
-          <h3>{player.name}</h3>
-          <p>Points: {player.points}</p>
-          <p>Assists: {player.assists}</p>
-          <p>Time on Ice: {player.timeOnIce} minutes</p>
-          <p>Fights: {player.fights}</p>
+          <LineGraph players={selectedPlayers} />
         </div>
       )}
     </div>

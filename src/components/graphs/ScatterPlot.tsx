@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { scatterAxisValues, ScatterAxisValuesKeys } from "../types";
 import * as d3 from "d3";
 import { AxisLeft } from "./AxisLeft";
@@ -7,15 +7,16 @@ import "./graphs.css";
 
 interface ScatterPlotProps {
   players: any[];
-  xAxis: ScatterAxisValuesKeys;
-  yAxis: ScatterAxisValuesKeys;
 }
 
 // NOTE: *********** Investigate the keys since it thinks they are a basic string
 
 const MARGIN = { top: 60, right: 60, bottom: 60, left: 60 };
 
-function ScatterPlot({ players, xAxis, yAxis }: ScatterPlotProps) {
+function ScatterPlot({ players }: ScatterPlotProps) {
+  const [xAxis, setXAxis] = useState<ScatterAxisValuesKeys>("points");
+  const [yAxis, setYAxis] = useState<ScatterAxisValuesKeys>("assists");
+
   const xDomain =
     players.length > 0
       ? players.reduce((max, player) => Math.max(max, player[xAxis]), 0) + 5
@@ -51,28 +52,57 @@ function ScatterPlot({ players, xAxis, yAxis }: ScatterPlotProps) {
 
   return (
     <div>
-      <svg width={width} height={height}>
-        <g
-          width={boundsWidth}
-          height={boundsHeight}
-          transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
-        >
-          {/* Y axis */}
-          <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
+      <div>
+        <label>
+          X Axis:
+          <select
+            value={xAxis}
+            onChange={(e) => {
+              setXAxis(e.target.value);
+            }}
+          >
+            {Object.keys(scatterAxisValues).map((key) => (
+              <option key={key} value={key}>
+                {scatterAxisValues[key]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Y Axis:
+          <select value={yAxis} onChange={(e) => setYAxis(e.target.value)}>
+            {Object.keys(scatterAxisValues).map((key) => (
+              <option key={key} value={key}>
+                {scatterAxisValues[key]}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <div>
+        <svg width={width} height={height}>
+          <g
+            width={boundsWidth}
+            height={boundsHeight}
+            transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+          >
+            {/* Y axis */}
+            <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
 
-          {/* X axis, use an additional translation to appear at the bottom */}
-          <g transform={`translate(0, ${boundsHeight})`}>
-            <AxisBottom
-              xScale={xScale}
-              pixelsPerTick={40}
-              height={boundsHeight}
-            />
+            {/* X axis, use an additional translation to appear at the bottom */}
+            <g transform={`translate(0, ${boundsHeight})`}>
+              <AxisBottom
+                xScale={xScale}
+                pixelsPerTick={40}
+                height={boundsHeight}
+              />
+            </g>
+            {dataPoints}
           </g>
-          {dataPoints}
-        </g>
-      </svg>
-      <h3 className="scatter-plot-xlabel">{scatterAxisValues[xAxis]}</h3>
-      <h3 className="scatter-plot-ylabel">{scatterAxisValues[yAxis]}</h3>
+        </svg>
+        <h3 className="scatter-plot-xlabel">{scatterAxisValues[xAxis]}</h3>
+        <h3 className="scatter-plot-ylabel">{scatterAxisValues[yAxis]}</h3>
+      </div>
     </div>
   );
 }

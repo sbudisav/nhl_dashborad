@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import PlayerSearch from "./PlayerSearch";
 import ScatterPlot from "./graphs/ScatterPlot";
-import {
-  Player,
-  PlayerPlot,
-  scatterAxisValues,
-  ScatterAxisValuesKeys,
-} from "./types";
+import { Player, PlayerPlot } from "./types";
+import PlayerList from "./PlayerList";
 
 function PlayerComparison() {
   const [selectedPlayers, setSelectedPlayers] = useState<PlayerPlot[]>([]);
-  const [xAxis, setXAxis] = useState<ScatterAxisValuesKeys>("points");
-  const [yAxis, setYAxis] = useState<ScatterAxisValuesKeys>("assists");
 
   const handlePlayerSelected = (playerToAdd: Player) => {
     if (
@@ -39,70 +33,18 @@ function PlayerComparison() {
   return (
     <div>
       <h2>Player Comparison</h2>
-      {selectedPlayers.length > 10 && (
-        <div>
-          <button onClick={handleClearPlayers}>Clear Players</button>
-        </div>
-      )}
+      <button onClick={handleClearPlayers}>Clear</button>
       <PlayerSearch
         onSelect={handlePlayerSelected}
         selectedPlayers={selectedPlayers}
         limit={10}
       />
-      <div>
-        {selectedPlayers.length === 10 && (
-          <div className="max-player-error">Max 10 players </div>
-        )}
-        <h3>Selected Players:</h3>
-        <ul className="selected-player-list">
-          {selectedPlayers.map((player) => (
-            <li
-              key={player.id}
-              className="selected-player"
-              style={{ backgroundColor: player.colorFill }}
-            >
-              <div className="selected-player-text">
-                <span>{player.name}</span>
-                <button
-                  onClick={() => handleRemovePlayer(player.id)}
-                  className="selected-player-remove-button"
-                >
-                  x
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <label>
-          X Axis:
-          <select
-            value={xAxis}
-            onChange={(e) => {
-              console.log("What is this", e.target);
-              setXAxis(e.target.value);
-            }}
-          >
-            {Object.keys(scatterAxisValues).map((key) => (
-              <option key={key} value={key}>
-                {scatterAxisValues[key]}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Y Axis:
-          <select value={yAxis} onChange={(e) => setYAxis(e.target.value)}>
-            {Object.keys(scatterAxisValues).map((key) => (
-              <option key={key} value={key}>
-                {scatterAxisValues[key]}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <ScatterPlot players={selectedPlayers} xAxis={xAxis} yAxis={yAxis} />
+      <PlayerList
+        limit={10}
+        selectedPlayers={selectedPlayers}
+        handleRemove={(playerId) => handleRemovePlayer(playerId)}
+      />
+      <ScatterPlot players={selectedPlayers} />
     </div>
   );
 }

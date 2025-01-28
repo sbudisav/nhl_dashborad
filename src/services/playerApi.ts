@@ -60,7 +60,7 @@ export const fetchMockPlayer = (): Player => {
       gameDate: game.gameDate,
       goalsInGame: game.goals,
       assistsInGame: game.assists,
-      opponentName: game.opponentName,
+      opponentName: game.opponentCommonName.default,
     };
   });
 
