@@ -20,7 +20,7 @@ export const AxisLeft = ({ yScale, pixelsPerTick, width }: AxisLeftProps) => {
       value,
       yOffset: yScale(value),
     }));
-  }, [yScale]);
+  }, [yScale, pixelsPerTick, range]);
 
   return (
     <>

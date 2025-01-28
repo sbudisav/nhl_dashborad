@@ -1,30 +1,39 @@
 import React, { useState } from "react";
-import SearchBar from "./PlayerSearch";
 import { Player } from "./types";
+import { fetchMockPlayer } from "../services/playerApi";
+import PlayerSearch from "./PlayerSearch";
 
 function PlayerDetail() {
-  const [player, setPlayer] = useState<Player>();
+  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
 
-  const handleSearch = (playerName: string) => {
+  const playerOverTime = fetchMockPlayer();
+
+  const handlePlayerSelected = (playerToAdd: Player) => {
     // const foundPlayer = fakePlayers.find((p) =>
     //   p.name.toLowerCase().includes(playerName.toLowerCase())
     // );
-    const foundPlayer = {
-      id: 123,
-      name: "Steve",
-      points: 12,
-      goals: 12,
-      assists: 24,
-      timeOnIce: 123,
-      fights: 0,
-    };
-    setPlayer(foundPlayer);
+    setSelectedPlayers([playerOverTime]);
+  };
+
+  const player = selectedPlayers[0];
+
+  const handleClearPlayers = () => {
+    return;
   };
 
   return (
     <div>
       <h2>Player Detail</h2>
-      {/* <SearchBar onSearch={handleSearch} /> */}
+      {selectedPlayers.length > 1 && (
+        <div>
+          <button onClick={handleClearPlayers}>Clear Players</button>
+        </div>
+      )}
+      <PlayerSearch
+        onSelect={handlePlayerSelected}
+        selectedPlayers={selectedPlayers}
+        limit={1}
+      />
       {player && (
         <div>
           <h3>{player.name}</h3>

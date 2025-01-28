@@ -1,26 +1,30 @@
-import React, { useEffect, useRef } from "react";
-import { Player, scatterAxisValues } from "../types";
+import React from "react";
+import { scatterAxisValues, ScatterAxisValuesKeys } from "../types";
 import * as d3 from "d3";
 import { AxisLeft } from "./AxisLeft";
 import { AxisBottom } from "./AxisBottom";
 import "./graphs.css";
 
 interface ScatterPlotProps {
-  players: Player[];
-  xAxis: any;
-  yAxis: any;
+  players: any[];
+  xAxis: ScatterAxisValuesKeys;
+  yAxis: ScatterAxisValuesKeys;
 }
+
+// NOTE: *********** Investigate the keys since it thinks they are a basic string
 
 const MARGIN = { top: 60, right: 60, bottom: 60, left: 60 };
 
 function ScatterPlot({ players, xAxis, yAxis }: ScatterPlotProps) {
-  let hueValue = 0;
-  const playerDataPoints = players.map((player) => {
-    let hslFillColor = `hsl(${hueValue}, 70%, 60%)`;
-    let hslStrokeColor = `hsl(${hueValue}, 70%, 45%)`;
-    hueValue += 60;
-    return { ...player, fillColor: hslFillColor, strokeColor: hslStrokeColor };
-  });
+  const xDomain =
+    players.length > 0
+      ? players.reduce((max, player) => Math.max(max, player[xAxis]), 0) + 5
+      : 40;
+  const yDomain =
+    players.length > 0
+      ? players.reduce((max, player) => Math.max(max, player[yAxis]), 0) + 5
+      : 40;
+
   // We want dynamic width
   const width = 500;
   const height = 500;
@@ -28,18 +32,18 @@ function ScatterPlot({ players, xAxis, yAxis }: ScatterPlotProps) {
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
-  const yScale = d3.scaleLinear().domain([0, 40]).range([boundsHeight, 0]);
-  const xScale = d3.scaleLinear().domain([0, 40]).range([0, boundsWidth]);
+  const yScale = d3.scaleLinear().domain([0, yDomain]).range([boundsHeight, 0]);
+  const xScale = d3.scaleLinear().domain([0, xDomain]).range([0, boundsWidth]);
 
-  const dataPoints = playerDataPoints.map((player, i) => {
+  const dataPoints = players.map((player, i) => {
     return (
       <circle
         key={i}
         r={7} // radius
-        cx={xScale(player.points)} // position on the X axis
-        cy={yScale(player.goals)} // on the Y axis
-        stroke={player.strokeColor}
-        fill={player.fillColor}
+        cx={xScale(player[xAxis])}
+        cy={yScale(player[yAxis])}
+        stroke={player.colorStroke}
+        fill={player.colorFill}
         className="scatter-plot-point"
       />
     );
@@ -67,8 +71,8 @@ function ScatterPlot({ players, xAxis, yAxis }: ScatterPlotProps) {
           {dataPoints}
         </g>
       </svg>
-      <h3 className="scatter-plot-xlabel">{xAxis}</h3>
-      <h3 className="scatter-plot-ylabel">{yAxis}</h3>
+      <h3 className="scatter-plot-xlabel">{scatterAxisValues[xAxis]}</h3>
+      <h3 className="scatter-plot-ylabel">{scatterAxisValues[yAxis]}</h3>
     </div>
   );
 }

@@ -1,11 +1,9 @@
-import { makinnon } from "./makinnon";
-import { allPlayersData } from "./playersData";
-
-export const fetchAllPlayers = () => {
-  console.log("Fetching all players");
-};
+import { Game, Player } from "../components/types";
+import { makinnon } from "./mockData/makinnon";
+import { allPlayersData } from "./mockData/playersData";
 
 export const fetchPlayer = () => {
+  console.log("Fetching specific player");
   // fetch("https://api.nhle.com/stats/rest/en/skater/summary")
   //     .then((response) => response.json())
   //     .then((json) => {
@@ -20,11 +18,26 @@ export const fetchPlayer = () => {
   return {};
 };
 
-export const fetchPlayerOverTime = () => {
-  return makinnon;
+export const fetchTeamRoster = () => {
+  console.log("Fetching team roster");
+  // fetch("https://api.nhle.com/stats/rest/en/skater/summary")
+  //     .then((response) => response.json())
+  //     .then((json) => {
+  //       console.log("RAW JSON", json);
+  //         const results = json.map((player: any) => {
+  //           ({
+  //             id: player.id,
+  //             name: player.firstName.default + " " + player.lastName.default,
+  //           });
+  //         });
+  //     });
+  return {};
 };
 
-export const fetchPlayerData = () => {
+// ********************************************************************
+// ************************ MOCK DATA *********************************
+
+export const fetchMockPlayerData = () => {
   const mappedData = allPlayersData.data.map((player: any) => {
     return {
       id: player.playerId,
@@ -36,6 +49,30 @@ export const fetchPlayerData = () => {
       fights: 0,
     };
   });
-  console.log(mappedData);
+  return mappedData;
+};
+
+export const fetchMockPlayer = (): Player => {
+  const player = allPlayersData.data[1];
+  const playerGames: Game[] = makinnon.gameLog.map((game: any) => {
+    return {
+      gameId: game.gameId,
+      gameDate: game.gameDate,
+      goalsInGame: game.goals,
+      assistsInGame: game.assists,
+      opponentName: game.opponentName,
+    };
+  });
+
+  const mappedData = {
+    id: player.playerId,
+    name: player.skaterFullName,
+    points: player.points,
+    goals: player.goals,
+    assists: player.assists,
+    timeOnIce: player.timeOnIcePerGame,
+    fights: 0,
+    games: playerGames,
+  };
   return mappedData;
 };

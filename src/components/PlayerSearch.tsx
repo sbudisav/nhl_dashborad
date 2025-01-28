@@ -1,21 +1,17 @@
 import React, { useRef, useState } from "react";
 import { Player } from "./types";
-import { fetchPlayerData } from "../services/playerApi";
+import { fetchMockPlayerData } from "../services/playerApi";
 import useClickOutside from "../hooks/useClickOutside";
 
 type PlayerSearchProps = {
   onSelect: (player: Player) => void;
   selectedPlayers: Player[];
-  clearPlayers: any;
+  limit: number;
 };
 
-const playerData = fetchPlayerData();
+const playerData = fetchMockPlayerData();
 
-function PlayerSearch({
-  onSelect,
-  selectedPlayers,
-  clearPlayers,
-}: PlayerSearchProps) {
+function PlayerSearch({ onSelect, selectedPlayers, limit }: PlayerSearchProps) {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchSuggestion, setSearchSuggestion] = useState<Player[]>([]);
   const searchTextRef = useRef<HTMLInputElement>(null);
@@ -34,7 +30,8 @@ function PlayerSearch({
   const handleSelectPlayer = (player: Player) => {
     onSelect(player);
     setSearchSuggestion(searchSuggestion.filter((p) => p.id !== player.id));
-    if (selectedPlayers.length === 4) {
+    if (selectedPlayers.length === limit) {
+      // make search box invalid
       clearSearch();
     }
   };
@@ -55,13 +52,8 @@ function PlayerSearch({
           value={searchTerm}
           onChange={handleSearch}
         />
-        {selectedPlayers.length > 4 && (
-          <div>
-            <button onClick={clearPlayers}>Clear Players</button>
-          </div>
-        )}
       </div>
-      {searchSuggestion.length > 0 && selectedPlayers.length !== 5 && (
+      {searchSuggestion.length > 0 && selectedPlayers.length !== 10 && (
         <div>
           <ul className="player-suggestion-list">
             {searchSuggestion.map((player) => (

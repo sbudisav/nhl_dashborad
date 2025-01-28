@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import PlayerComparison from "./PlayerComparison";
-import PlayerDetail from "./PlayerDetail";
+import React from "react";
 
 type NavBarProps = {
   setActiveTab: any;
@@ -14,10 +12,7 @@ function Navbar({ setActiveTab }: NavBarProps) {
           Player Comparison
         </button>
         <button onClick={() => setActiveTab("playerDetail")}>
-          Player Detail
-        </button>
-        <button onClick={() => setActiveTab("playerDetail")}>
-          Player's Over Time
+          Player Detail Over Time
         </button>
       </header>
     </div>

@@ -1,20 +1,30 @@
 import React, { useState } from "react";
 import PlayerSearch from "./PlayerSearch";
 import ScatterPlot from "./graphs/ScatterPlot";
-import { Player, scatterAxisValues } from "./types";
+import {
+  Player,
+  PlayerPlot,
+  scatterAxisValues,
+  ScatterAxisValuesKeys,
+} from "./types";
 
 function PlayerComparison() {
-  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
-  const [xAxis, setXAxis] = useState(scatterAxisValues.points);
-  const [yAxis, setYAxis] = useState(scatterAxisValues.assists);
+  const [selectedPlayers, setSelectedPlayers] = useState<PlayerPlot[]>([]);
+  const [xAxis, setXAxis] = useState<ScatterAxisValuesKeys>("points");
+  const [yAxis, setYAxis] = useState<ScatterAxisValuesKeys>("assists");
 
-  const handlePlayerSelected = (player: Player) => {
+  const handlePlayerSelected = (playerToAdd: Player) => {
     if (
-      player &&
-      selectedPlayers.length < 5 &&
-      !selectedPlayers.includes(player)
+      playerToAdd &&
+      selectedPlayers.length < 10 &&
+      !selectedPlayers.some((player) => player.id === playerToAdd.id)
     ) {
-      setSelectedPlayers([...selectedPlayers, player]);
+      const playerPlot: PlayerPlot = {
+        ...playerToAdd,
+        colorFill: `hsl(${42 * selectedPlayers.length}, 75%, 60%)`,
+        colorStroke: `hsl(${42 * selectedPlayers.length}, 75%, 47%)`,
+      };
+      setSelectedPlayers([...selectedPlayers, playerPlot]);
     }
   };
 
@@ -29,19 +39,28 @@ function PlayerComparison() {
   return (
     <div>
       <h2>Player Comparison</h2>
+      {selectedPlayers.length > 10 && (
+        <div>
+          <button onClick={handleClearPlayers}>Clear Players</button>
+        </div>
+      )}
       <PlayerSearch
         onSelect={handlePlayerSelected}
         selectedPlayers={selectedPlayers}
-        clearPlayers={handleClearPlayers}
+        limit={10}
       />
       <div>
-        {selectedPlayers.length === 5 && (
-          <div className="max-player-error">Max 5 players </div>
+        {selectedPlayers.length === 10 && (
+          <div className="max-player-error">Max 10 players </div>
         )}
         <h3>Selected Players:</h3>
         <ul className="selected-player-list">
           {selectedPlayers.map((player) => (
-            <li key={player.id} className="selected-player">
+            <li
+              key={player.id}
+              className="selected-player"
+              style={{ backgroundColor: player.colorFill }}
+            >
               <div className="selected-player-text">
                 <span>{player.name}</span>
                 <button

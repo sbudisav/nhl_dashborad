@@ -6,6 +6,42 @@ export type Player = {
   assists: number;
   timeOnIce: number;
   fights: number;
+  salary?: number;
+  team?: string;
+  games?: Game[];
+};
+
+export type Game = {
+  gameId: number;
+  gameDate: Date;
+  goalsInGame: number;
+  assistsInGame: number;
+  opponentName: string;
+  plusMinus?: number;
+  powerPlayGoals?: number;
+  powerPlayPoints?: number;
+  gameWinningGoals?: number;
+  otGoals?: number;
+  shots?: number;
+  shifts?: number;
+  shorthandedGoals?: number;
+  shorthandedPoints?: number;
+  opponentAbbrev?: string;
+  pim?: number;
+  toi?: number;
+};
+
+export type Team = {
+  id: number;
+  name: string;
+  location: string;
+  players: Player[];
+  salaryUsed: number;
+};
+
+export type PlayerPlot = Player & {
+  colorFill: string;
+  colorStroke: string;
 };
 
 export const scatterAxisValues: Record<string, string> = {
@@ -15,3 +51,5 @@ export const scatterAxisValues: Record<string, string> = {
   timeOnIce: "Time on Ice",
   fights: "Fights",
 };
+
+export type ScatterAxisValuesKeys = keyof typeof scatterAxisValues;
