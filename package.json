@@ -3,26 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@tanstack/react-query": "^5.65.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "chart.js": "^4.4.4",
     "d3": "^7.9.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
-    "react-scripts": "^3.0.1",
-    "typescript": "^5.6.2",
+    "vite": "^6.0.11",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
+  "proxy": "https://api-web.nhle.com",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -42,7 +41,13 @@
     ]
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.65.0",
     "@types/d3": "^7.4.3",
-    "react-error-overlay": "^6.0.9"
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "eslint": "^9.19.0",
+    "react-error-overlay": "^6.0.9",
+    "typescript": "^5.7.3",
+    "vite-plugin-eslint": "^1.8.1"
   }
 }

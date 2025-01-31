@@ -2,8 +2,12 @@ import { Game, Player } from "../components/types";
 import { makinnon } from "./mockData/makinnon";
 import { allPlayersData } from "./mockData/playersData";
 
-export const fetchPlayer = () => {
-  console.log("Fetching specific player");
+export const fetchRoster = () => {
+  return {};
+};
+
+export const fetchPlayer = (playerId: number) => {
+  console.log("Fetching specific player", playerId);
   // fetch("https://api.nhle.com/stats/rest/en/skater/summary")
   //     .then((response) => response.json())
   //     .then((json) => {
@@ -18,9 +22,9 @@ export const fetchPlayer = () => {
   return {};
 };
 
-export const fetchTeamRoster = () => {
-  console.log("Fetching team roster");
-  // fetch("https://api.nhle.com/stats/rest/en/skater/summary")
+export const fetchPlayerGames = (playerId: number) => {
+  console.log("Fetching games for id", playerId);
+  // fetch(""https://api-web.nhle.com/v1/player/8478402/game-log/now"")
   //     .then((response) => response.json())
   //     .then((json) => {
   //       console.log("RAW JSON", json);

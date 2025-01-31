@@ -6,28 +6,30 @@ interface LineGraphProps {
 }
 
 function LineGraph({ players }: LineGraphProps) {
-  const games = players[0].games || [];
-
+  const games = players[0]?.games;
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
-    if (games.length > 0) {
-      drawChart();
-    }
-  }, [games]);
+    drawChart();
+  }, [players]);
 
   const drawChart = () => {
+    if (games === undefined) return;
+
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
     const margin = { top: 20, right: 30, bottom: 30, left: 40 };
     const width = 500 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
+    let totalGoals = 0;
 
-    const data = games.map((game) => ({
-      gameDate: new Date(game.gameDate),
-      goalsInGame: game.goalsInGame,
-    }));
+    const data = games.reverse().map((game) => {
+      return {
+        gameDate: new Date(game.gameDate),
+        goalsInGame: (totalGoals += game.goalsInGame),
+      };
+    });
 
     const xScale = d3
       .scaleTime()
@@ -53,8 +55,7 @@ function LineGraph({ players }: LineGraphProps) {
     const line = d3
       .line<{ gameDate: Date; goalsInGame: number }>()
       .x((d) => xScale(d.gameDate))
-      .y((d) => yScale(d.goalsInGame))
-      .curve(d3.curveMonotoneX);
+      .y((d) => yScale(d.goalsInGame));
 
     g.append("path")
       .datum(data)
@@ -74,7 +75,11 @@ function LineGraph({ players }: LineGraphProps) {
       .attr("fill", "steelblue");
   };
 
-  return <svg ref={svgRef} width={500} height={300} />;
+  return (
+    <div>
+      <svg ref={svgRef} width={500} height={300} />
+    </div>
+  );
 }
 
 export default LineGraph;

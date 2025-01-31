@@ -1,32 +1,37 @@
-import React, { useState } from "react";
-import { Player, PlayerPlot } from "./types";
-import { fetchMockPlayer } from "../services/playerApi";
+import React, { useEffect, useState } from "react";
+import { Game, Player, PlayerPlot } from "./types";
 import PlayerSearch from "./PlayerSearch";
 import PlayerList from "./PlayerList";
 import LineGraph from "./graphs/LineGraph";
+import { usePlayerData } from "../hooks/usePlayerData";
 
-const playerDetailLimit = 5;
+const playerDetailLimit = 3;
 
 function PlayerDetail() {
-  const playerOverTime = fetchMockPlayer();
-  const gamesPlayed = playerOverTime.games;
-
   const [selectedPlayers, setSelectedPlayers] = useState<PlayerPlot[]>([]);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
-  const handlePlayerSelected = (playerToAdd: Player) => {
+  const { data, isSuccess } = usePlayerData(selectedPlayer?.id);
+
+  useEffect(() => {
+    if (isSuccess && data && selectedPlayer) {
+      const playerPlot: PlayerPlot = {
+        ...selectedPlayer,
+        colorFill: `hsl(${42 * selectedPlayers.length}, 75%, 60%)`,
+        colorStroke: `hsl(${42 * selectedPlayers.length}, 75%, 47%)`,
+        games: data,
+      };
+      setSelectedPlayers([...selectedPlayers, playerPlot]);
+    }
+  }, [isSuccess]);
+
+  const handlePlayerSelected = async (playerToAdd: Player) => {
     if (
       playerToAdd &&
       selectedPlayers.length < playerDetailLimit &&
       !selectedPlayers.some((player) => player.id === playerToAdd.id)
     ) {
-      const playerPlot: PlayerPlot = {
-        ...playerToAdd,
-        colorFill: `hsl(${42 * selectedPlayers.length}, 75%, 60%)`,
-        colorStroke: `hsl(${42 * selectedPlayers.length}, 75%, 47%)`,
-        //  In the future this will probably have to be a second API call
-        games: gamesPlayed || [],
-      };
-      setSelectedPlayers([...selectedPlayers, playerPlot]);
+      setSelectedPlayer(playerToAdd);
     }
   };
 
@@ -34,13 +39,14 @@ function PlayerDetail() {
     setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
   };
 
-  // const handleClearPlayers = () => {
-  //   setSelectedPlayers([]);
-  // };
+  const handleClearPlayers = () => {
+    setSelectedPlayers([]);
+  };
 
   return (
     <div>
       <h2>Player Detail</h2>
+      <button onClick={handleClearPlayers}>Clear</button>
       <PlayerSearch
         onSelect={handlePlayerSelected}
         selectedPlayers={selectedPlayers}
@@ -51,11 +57,9 @@ function PlayerDetail() {
         selectedPlayers={selectedPlayers}
         handleRemove={(playerId) => handleRemovePlayer(playerId)}
       />
-      {selectedPlayers && (
-        <div>
-          <LineGraph players={selectedPlayers} />
-        </div>
-      )}
+      <div>
+        <LineGraph players={selectedPlayers} />
+      </div>
     </div>
   );
 }
