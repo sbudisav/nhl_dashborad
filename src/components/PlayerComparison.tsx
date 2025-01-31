@@ -4,13 +4,15 @@ import ScatterPlot from "./graphs/ScatterPlot";
 import { Player, PlayerPlot } from "./types";
 import PlayerList from "./PlayerList";
 
+const playerComparisonLimit = 10;
+
 function PlayerComparison() {
   const [selectedPlayers, setSelectedPlayers] = useState<PlayerPlot[]>([]);
 
   const handlePlayerSelected = (playerToAdd: Player) => {
     if (
       playerToAdd &&
-      selectedPlayers.length < 10 &&
+      selectedPlayers.length < playerComparisonLimit &&
       !selectedPlayers.some((player) => player.id === playerToAdd.id)
     ) {
       const playerPlot: PlayerPlot = {
@@ -37,10 +39,10 @@ function PlayerComparison() {
       <PlayerSearch
         onSelect={handlePlayerSelected}
         selectedPlayers={selectedPlayers}
-        limit={10}
+        limit={playerComparisonLimit}
       />
       <PlayerList
-        limit={10}
+        limit={playerComparisonLimit}
         selectedPlayers={selectedPlayers}
         handleRemove={(playerId) => handleRemovePlayer(playerId)}
       />

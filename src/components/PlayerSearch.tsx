@@ -15,14 +15,18 @@ function PlayerSearch({ onSelect, selectedPlayers, limit }: PlayerSearchProps) {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchSuggestion, setSearchSuggestion] = useState<Player[]>([]);
   const searchTextRef = useRef<HTMLInputElement>(null);
+  const [disabled, setDisabled] = useState(false);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length < 1) setSearchSuggestion([]);
     setSearchTerm(e.target.value);
     if (e.target.value.length > 0) {
-      const suggestedPlayers = playerData.filter((p) =>
-        p.name.toLowerCase().includes(e.target.value.toLowerCase())
-      );
+      const suggestedPlayers: Player[] = playerData.filter((p: Player) => {
+        return (
+          !selectedPlayers.some((player) => player.id === p.id) &&
+          p.name.toLowerCase().includes(e.target.value.toLowerCase())
+        );
+      });
       setSearchSuggestion(suggestedPlayers.slice(0, 10));
     }
   };
@@ -31,7 +35,7 @@ function PlayerSearch({ onSelect, selectedPlayers, limit }: PlayerSearchProps) {
     onSelect(player);
     setSearchSuggestion(searchSuggestion.filter((p) => p.id !== player.id));
     if (selectedPlayers.length === limit) {
-      // make search box invalid
+      setDisabled(true);
       clearSearch();
     }
   };
@@ -39,6 +43,7 @@ function PlayerSearch({ onSelect, selectedPlayers, limit }: PlayerSearchProps) {
   const clearSearch = () => {
     setSearchSuggestion([]);
     setSearchTerm("");
+    setDisabled(false);
   };
 
   useClickOutside(searchTextRef, clearSearch);
@@ -51,6 +56,7 @@ function PlayerSearch({ onSelect, selectedPlayers, limit }: PlayerSearchProps) {
           placeholder="Search for a player"
           value={searchTerm}
           onChange={handleSearch}
+          disabled={disabled}
         />
       </div>
       {searchSuggestion.length > 0 && selectedPlayers.length !== 10 && (

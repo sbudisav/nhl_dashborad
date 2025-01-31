@@ -26,6 +26,12 @@ function PlayerDetail() {
   }, [isSuccess]);
 
   const handlePlayerSelected = async (playerToAdd: Player) => {
+    console.log(
+      "incoming player",
+      playerToAdd.name,
+      "current list",
+      selectedPlayers
+    );
     if (
       playerToAdd &&
       selectedPlayers.length < playerDetailLimit &&
