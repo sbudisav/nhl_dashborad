@@ -17,7 +17,9 @@ interface LineGraphProps {
 }
 
 function LineGraph({ players }: LineGraphProps) {
-  const [yAxis, setYAxis] = useState<"Goals" | "Assists">("Goals");
+  // const [yAxis, setYAxis] = useState<"goals" | "assists">("goals");
+  const [yAxis, setYAxis] = useState<string>("goals");
+
   const dateMap = new Map();
 
   players.forEach((player) => {
@@ -39,39 +41,55 @@ function LineGraph({ players }: LineGraphProps) {
   );
 
   return (
-    <ResponsiveContainer width="130%" height={450}>
-      <LineChart
-        data={formattedData}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
+    <div>
+      <select
+        value={yAxis}
+        onChange={(e) => {
+          setYAxis(e.target.value);
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis
-          dataKey="date"
-          label={"Date"}
-          tickFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
-        />
-        <YAxis label={yAxis} />
-        <Tooltip />
-        <Legend />
-        {players.map((player, index) => (
-          <Line
-            key={`${player.id}-goals`}
-            name={player.name}
-            type="linear"
-            dataKey={`${player.id}-goals`}
-            stroke={player.colorFill}
-            strokeWidth={3}
-            dot={true}
-            connectNulls={true}
+        <option key={"goals"} value={"goals"}>
+          Goals
+        </option>
+        <option key={"assists"} value={"assists"}>
+          Assists
+        </option>
+      </select>
+
+      <ResponsiveContainer width="130%" height={450}>
+        <LineChart
+          data={formattedData}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="date"
+            label={"Date"}
+            tickFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
           />
-        ))}
-      </LineChart>
-    </ResponsiveContainer>
+          <YAxis label={yAxis} />
+          <Tooltip />
+          <Legend />
+          {players.map((player, index) => (
+            <Line
+              key={`${player.id}-${yAxis}`}
+              name={player.name}
+              type="linear"
+              dataKey={`${player.id}-${yAxis}`}
+              stroke={player.colorFill}
+              strokeWidth={3}
+              dot={true}
+              connectNulls={true}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
 
