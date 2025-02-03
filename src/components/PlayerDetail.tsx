@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Game, Player, PlayerPlot } from "./types";
+import { Player, PlayerPlot } from "./types";
 import PlayerSearch from "./PlayerSearch";
 import PlayerList from "./PlayerList";
 import LineGraph from "./graphs/LineGraph";
@@ -19,19 +19,13 @@ function PlayerDetail() {
         ...selectedPlayer,
         colorFill: `hsl(${42 * selectedPlayers.length}, 75%, 60%)`,
         colorStroke: `hsl(${42 * selectedPlayers.length}, 75%, 47%)`,
-        games: data,
+        gameLog: data || [],
       };
       setSelectedPlayers([...selectedPlayers, playerPlot]);
     }
   }, [isSuccess]);
 
   const handlePlayerSelected = async (playerToAdd: Player) => {
-    console.log(
-      "incoming player",
-      playerToAdd.name,
-      "current list",
-      selectedPlayers
-    );
     if (
       playerToAdd &&
       selectedPlayers.length < playerDetailLimit &&

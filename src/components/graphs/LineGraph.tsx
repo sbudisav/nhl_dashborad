@@ -1,84 +1,77 @@
-import React, { useEffect, useRef } from "react";
-import * as d3 from "d3";
+import React, { useState } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { PlayerPlot } from "../types";
+import * as d3 from "d3";
+
 interface LineGraphProps {
   players: PlayerPlot[];
 }
 
 function LineGraph({ players }: LineGraphProps) {
-  const games = players[0]?.games;
-  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [yAxis, setYAxis] = useState<"Goals" | "Assists">("Goals");
+  const dateMap = new Map();
 
-  useEffect(() => {
-    drawChart();
-  }, [players]);
-
-  const drawChart = () => {
-    if (games === undefined) return;
-
-    const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove();
-
-    const margin = { top: 20, right: 30, bottom: 30, left: 40 };
-    const width = 500 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
-    let totalGoals = 0;
-
-    const data = games.reverse().map((game) => {
-      return {
-        gameDate: new Date(game.gameDate),
-        goalsInGame: (totalGoals += game.goalsInGame),
-      };
+  players.forEach((player) => {
+    if (player.gameLog === undefined) return;
+    player.gameLog.forEach((game) => {
+      if (!dateMap.has(game.gameDate)) {
+        dateMap.set(game.gameDate, { date: game.gameDate });
+      }
+      dateMap.get(game.gameDate)![`${player.id}-goals`] = game.goalsAccumulated;
+      dateMap.get(game.gameDate)![`${player.id}-assists`] =
+        game.assistsAccumulated;
     });
+  });
 
-    const xScale = d3
-      .scaleTime()
-      .domain(d3.extent(data, (d) => d.gameDate) as [Date, Date])
-      .range([0, width]);
-
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.goalsInGame) as number])
-      .range([height, 0]);
-
-    const xAxis = d3.axisBottom(xScale).ticks(5);
-    const yAxis = d3.axisLeft(yScale).ticks(5);
-
-    const g = svg
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    g.append("g").attr("transform", `translate(0,${height})`).call(xAxis);
-
-    g.append("g").call(yAxis);
-
-    const line = d3
-      .line<{ gameDate: Date; goalsInGame: number }>()
-      .x((d) => xScale(d.gameDate))
-      .y((d) => yScale(d.goalsInGame));
-
-    g.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 2)
-      .attr("d", line);
-
-    g.selectAll(".point")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("class", "point")
-      .attr("cx", (d) => xScale(d.gameDate))
-      .attr("cy", (d) => yScale(d.goalsInGame))
-      .attr("r", 4)
-      .attr("fill", "steelblue");
-  };
+  const formattedData = Array.from(dateMap.values()).sort(
+    (a, b) =>
+      new Date(a.date as string).getTime() -
+      new Date(b.date as string).getTime()
+  );
 
   return (
-    <div>
-      <svg ref={svgRef} width={500} height={300} />
-    </div>
+    <ResponsiveContainer width="130%" height={450}>
+      <LineChart
+        data={formattedData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis
+          dataKey="date"
+          label={"Date"}
+          tickFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
+        />
+        <YAxis label={yAxis} />
+        <Tooltip />
+        <Legend />
+        {players.map((player, index) => (
+          <Line
+            key={`${player.id}-goals`}
+            name={player.name}
+            type="linear"
+            dataKey={`${player.id}-goals`}
+            stroke={player.colorFill}
+            strokeWidth={3}
+            dot={true}
+            connectNulls={true}
+          />
+        ))}
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
 

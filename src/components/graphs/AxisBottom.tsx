@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ScaleLinear } from "d3";
+import { ScaleLinear, ScaleTime } from "d3";
 
 type AxisBottomProps = {
   xScale: ScaleLinear<number, number>;

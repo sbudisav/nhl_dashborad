@@ -6,9 +6,8 @@ export type Player = {
   assists: number;
   timeOnIce: number;
   fights: number;
-  salary?: number;
   team?: string;
-  games?: Game[];
+  gameLog?: Game[];
 };
 
 export type Game = {
@@ -17,6 +16,8 @@ export type Game = {
   goalsInGame: number;
   assistsInGame: number;
   opponentName: string;
+  goalsAccumulated: number;
+  assistsAccumulated: number;
   plusMinus?: number;
   powerPlayGoals?: number;
   powerPlayPoints?: number;

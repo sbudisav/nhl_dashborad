@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Player } from "./types";
-import { fetchMockPlayerData } from "../services/playerApi";
 import useClickOutside from "../hooks/useClickOutside";
+import { useTopPlayers } from "../hooks/useTopPlayers";
 
 type PlayerSearchProps = {
   onSelect: (player: Player) => void;
@@ -9,13 +9,20 @@ type PlayerSearchProps = {
   limit: number;
 };
 
-const playerData = fetchMockPlayerData();
-
 function PlayerSearch({ onSelect, selectedPlayers, limit }: PlayerSearchProps) {
+  const [playerData, setPlayerData] = useState<Player[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchSuggestion, setSearchSuggestion] = useState<Player[]>([]);
   const searchTextRef = useRef<HTMLInputElement>(null);
   const [disabled, setDisabled] = useState(false);
+
+  const { data, isSuccess } = useTopPlayers();
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setPlayerData(data);
+    }
+  }, [isSuccess]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length < 1) setSearchSuggestion([]);

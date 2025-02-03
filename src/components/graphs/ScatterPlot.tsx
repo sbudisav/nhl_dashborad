@@ -3,6 +3,7 @@ import { scatterAxisValues, ScatterAxisValuesKeys } from "../types";
 import * as d3 from "d3";
 import { AxisLeft } from "./AxisLeft";
 import { AxisBottom } from "./AxisBottom";
+import { Tooltip } from "react-tooltip";
 import "./graphs.css";
 
 interface ScatterPlotProps {
@@ -26,7 +27,7 @@ function ScatterPlot({ players }: ScatterPlotProps) {
       ? players.reduce((max, player) => Math.max(max, player[yAxis]), 0) + 5
       : 40;
 
-  // We want dynamic width
+  // TODO set dynamic height/width based on window
   const width = 500;
   const height = 500;
 
@@ -46,12 +47,15 @@ function ScatterPlot({ players }: ScatterPlotProps) {
         stroke={player.colorStroke}
         fill={player.colorFill}
         className="scatter-plot-point"
+        data-tooltip-id="player-tooltip"
+        data-tooltip-content={player.name}
       />
     );
   });
 
   return (
     <div>
+      <Tooltip id="player-tooltip" />
       <div>
         <label>
           X Axis:
