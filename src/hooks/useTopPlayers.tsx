@@ -3,19 +3,18 @@ import { Player } from "../components/types";
 import { map } from "d3";
 
 const fetchTopPlayers = async () => {
+  const altUrl =
+    "https://api-web.nhle.com/v1/skater-stats-leaders/current?" +
+    new URLSearchParams({
+      start: "0",
+      limit: "5",
+    });
+
   const url =
     "https://api.nhle.com/stats/rest/en/skater/summary?" +
     new URLSearchParams({
-      isAggregate: "false",
-      isGame: "false",
-      sort: JSON.stringify([
-        { property: "points", direction: "DESC" },
-        { property: "goals", direction: "DESC" },
-        { property: "assists", direction: "DESC" },
-        { property: "playerId", direction: "ASC" },
-      ]),
-      start: "0",
-      limit: "50",
+      sort: JSON.stringify([{ property: "points", direction: "DESC" }]),
+      limit: "100",
       cayenneExp: "gameTypeId=2 and seasonId<=20242025 and seasonId>=20242025",
     });
 
@@ -32,6 +31,8 @@ const fetchTopPlayers = async () => {
       goals: player.goals,
       assists: player.assists,
       timeOnIce: player.timeOnIcePerGame,
+      teamAbv: player.teamAbbrevs,
+      position: player.positionCode,
       fights: 0,
     };
   });

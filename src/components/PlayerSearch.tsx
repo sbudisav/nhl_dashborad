@@ -75,7 +75,10 @@ function PlayerSearch({ onSelect, selectedPlayers, limit }: PlayerSearchProps) {
                 onClick={() => handleSelectPlayer(player)}
                 className="player-suggestion-item"
               >
-                {player.name}
+                <div>
+                  {player.name} - {player.position}
+                </div>
+                <div>{player.teamAbv}</div>
               </li>
             ))}
           </ul>

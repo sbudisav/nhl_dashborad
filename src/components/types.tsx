@@ -6,7 +6,8 @@ export type Player = {
   assists: number;
   timeOnIce: number;
   fights: number;
-  team?: string;
+  teamAbv: string;
+  position: string;
   gameLog?: Game[];
 };
 

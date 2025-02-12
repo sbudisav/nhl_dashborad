@@ -131,6 +131,8 @@ select {
 
 .player-suggestion-item {
   padding: 8px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .player-suggestion-item:hover {
